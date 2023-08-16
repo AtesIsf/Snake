@@ -2,6 +2,7 @@
 #define SCENE_HPP
 
 #include <raylib.h>
+#include <raymath.h>
 #include "consts.hpp"
 #include "snake.hpp"
 #include "food.hpp"
@@ -41,11 +42,14 @@ void Scene::Update()
 {
     snake->Update();
 
-    if (snake->body[0].x == food->pos.x && snake->body[0].y == food->pos.y)
+    if (Vector2Equals(snake->body[0], food->pos))
     {
         score++;
-
+        // Render out of the screen, will be added the next frame (gives growing effect)
+        snake->body.push_back(Vector2{-1, -1});
+        
         // Check whether the food placement is valid
+        int n = 0;
         while (!IsValidPos())
             food->GenerateRandomPos();
     }
@@ -61,7 +65,7 @@ bool Scene::IsValidPos()
 {
     for (int i = 0; i<snake->body.size(); i++)
     {
-        if(snake->body[i].x == food->pos.x && snake->body[i].y == food->pos.y)
+        if(Vector2Equals(snake->body[i], food->pos))
             return false;
     }
     return true;
