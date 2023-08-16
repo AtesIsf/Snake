@@ -19,7 +19,7 @@ bool eventTriggered(double interval)
 
 int main()
 {
-    InitWindow(CELL_SIZE * N_CELLS, CELL_SIZE * N_CELLS, WINDOW_TITLE);
+    InitWindow(2 * OFFSET + CELL_SIZE * N_CELLS, 2 * OFFSET + CELL_SIZE * N_CELLS, WINDOW_TITLE);
 
     SetTargetFPS(TARGET_FPS);
 
@@ -29,9 +29,6 @@ int main()
     {
         BeginDrawing();
 
-        // Drawing
-        ClearBackground(green);
-        
         // Update every 200ms
         if(eventTriggered(0.2))
             scene->Update();
@@ -40,10 +37,20 @@ int main()
             scene->snake->dir = UP;
         if(IsKeyPressed(KEY_S) && scene->snake->dir != UP)
             scene->snake->dir = DOWN;
-        if(IsKeyPressed(KEY_A) && scene->snake->dir != RIGHT)
+        // Going left at the start would end the game instantly
+        if(IsKeyPressed(KEY_A) && scene->snake->dir != RIGHT && scene->snake->dir != STOP)
             scene->snake->dir = LEFT;
         if(IsKeyPressed(KEY_D) && scene->snake->dir != LEFT)
             scene->snake->dir = RIGHT;
+
+        // Drawing
+        ClearBackground(green);
+        DrawRectangleLinesEx(
+            Rectangle{(float)OFFSET-5, (float)OFFSET-5, (float)CELL_SIZE * N_CELLS + 10, (float)CELL_SIZE * N_CELLS + 10},
+            5, darkGreen
+        );
+        DrawText("RayLib Snake", OFFSET-5, 20, 40, darkGreen);
+        DrawText(TextFormat("Score: %d", scene->score), N_CELLS * CELL_SIZE - OFFSET-12, 25, 30, WHITE);
 
         scene->Draw();
         

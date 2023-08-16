@@ -37,7 +37,7 @@ void Food::Draw()
 {
     // Multiply by CELL_SIZE as the function takes pixels, not grid coordinates, 
     // RED is tint (white does nothing)
-    DrawTexture(texture, pos.x * CELL_SIZE, pos.y * CELL_SIZE, WHITE);
+    DrawTexture(texture, OFFSET + pos.x * CELL_SIZE, OFFSET + pos.y * CELL_SIZE, WHITE);
 }
 
 void Food::GenerateRandomPos()
